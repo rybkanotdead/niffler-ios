@@ -35,11 +35,13 @@ extension MenuView {
                             .navigationBarItems(trailing: Button("Close") {
                                 showingProfile = false
                                 // TODO: Ask to save?
-                            })
+                            }
+                            .accessibilityIdentifier("closeProfileButton"))
                     }
                 }
                 .buttonStyle(.plain)
             }
+            .accessibilityIdentifier("profileButton")
 
             Divider()
 

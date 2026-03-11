@@ -64,15 +64,18 @@ extension ProfileView {
         Section(header: Text("Categories")) {
             ForEach(categoriesRepository.categories, id: \.self) { category in
                 Text(category)
+                    .accessibilityIdentifier("category_\(category)")
             }.onDelete { index in
                 self.categoriesRepository.remove(index)
             }
-            
+
             Button("Add Category") {
                 // TODO: Show alert
             }
+            .accessibilityIdentifier("addCategoryButton")
         }
         .listStyle(.insetGrouped)
+        .accessibilityIdentifier("categoriesList")
     }
 
     func saveChanges() {
