@@ -51,18 +51,30 @@ extension SpendsView {
                         .padding()
                     
                 case .data(let spends):
-                    LazyVStack {
-                        StatisticView(statByCategories: $statByCategories, totalStat: $totalStat)
-                        
-                        ForEach(spendsRepository.sortedSpends) { spend in
-                            SpendCell(spend: spend)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    select(spend: spend)
-                                }
-                                .highlightOnSelect(isPressed: selectedSpend == spend)
+                    if spends.isEmpty {
+                        VStack {
+                            Text("No spends yet")
+                                .font(.headline)
+                                .padding()
+                            Text("Add your first spend by tapping the + button")
+                                .font(.caption)
+                                .foregroundColor(.gray)
                         }
-                        .accessibilityIdentifier(SpendsViewIDs.spendsList.rawValue)
+                        .accessibilityIdentifier("emptySpendsList")
+                    } else {
+                        LazyVStack {
+                            StatisticView(statByCategories: $statByCategories, totalStat: $totalStat)
+
+                            ForEach(spendsRepository.sortedSpends) { spend in
+                                SpendCell(spend: spend)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        select(spend: spend)
+                                    }
+                                    .highlightOnSelect(isPressed: selectedSpend == spend)
+                            }
+                            .accessibilityIdentifier(SpendsViewIDs.spendsList.rawValue)
+                        }
                     }
                 case .error(let errorText):
                     Text(errorText)
