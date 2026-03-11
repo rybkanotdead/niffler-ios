@@ -12,15 +12,15 @@ class LoginPage: BasePage {
         return self
     }
     
-    private func input(login: String) {
+    func input(login: String) {
         XCTContext.runActivity(named: "Ввожу логин \(login)") { _ in
             app.textFields["userNameTextField"].tap()
             app.textFields["userNameTextField"].tap() // TODO: Remove the cause of double tap
             app.textFields["userNameTextField"].typeText(login)
         }
     }
-    
-    private func input(password: String) {
+
+    func input(password: String) {
         XCTContext.runActivity(named: "Ввожу пароль \(password)") { _ in
             app.secureTextFields["passwordTextField"].tap()
             app.secureTextFields["passwordTextField"].typeText(password)
