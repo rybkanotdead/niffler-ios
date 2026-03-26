@@ -12,23 +12,49 @@ class TestCase: XCTestCase {
     
     override func tearDown() {
         app = nil
-        
+
         loginPage = nil
         spendsPage = nil
         newSpendPage = nil
-        
+        profilePage = nil
+
         super.tearDown()
     }
-    
+
     func launchAppWithoutLogin() {
         XCTContext.runActivity(named: "Запускаю приложение в режиме 'без авторизации'") { _ in
             app.launchArguments = ["RemoveAuthOnStart"]
             app.launch()
         }
     }
-    
+
     lazy var loginPage: LoginPage! = LoginPage(app: app)
     lazy var spendsPage: SpendsPage! = SpendsPage(app: app)
     lazy var newSpendPage: NewSpendPage! = NewSpendPage(app: app)
+    lazy var profilePage: ProfilePage! = ProfilePage(app: app)
+
+    lazy var baseSteps: BaseSteps! = BaseSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
+
+    lazy var spendSteps: SpendSteps! = SpendSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
+
+    lazy var profileSteps: ProfileSteps! = ProfileSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
 }
 
