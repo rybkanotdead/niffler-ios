@@ -21,12 +21,25 @@ class NewSpendPage: BasePage {
         return self
     }
     
+    func selectCategory(_ categoryName: String) -> Self {
+        app.buttons["Select category"].tap()
+        app.buttons[categoryName].tap()
+        return self
+    }
+
     func inputDescription(_ title: String) -> Self {
         app.textFields["descriptionField"].tap()
         app.textFields["descriptionField"].typeText(title)
         return self
     }
     
+    func inputSpentWithNewCategory(title: String, categoryName: String) {
+        inputAmount()
+            .selectCategory(categoryName)
+            .inputDescription(title)
+            .pressAddSpend()
+    }
+
 //    func swipeToAddSpendsButton() -> Self {
 //        let screenCenter = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
 //        let screenTop = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))

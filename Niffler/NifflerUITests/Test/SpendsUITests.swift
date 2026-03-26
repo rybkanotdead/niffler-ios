@@ -3,9 +3,11 @@ import XCTest
 final class SpendsUITests: TestCase {
     
     func test_whenAddSpent_shouldShowSpendInList() {
+        // Arrange - объявляем тестовые данные в начале теста
+        let title = UUID.randomPart
+
         launchAppWithoutLogin()
         
-        // Arrange
         loginPage
             .input(login: "stage", password: "12345")
         
@@ -14,7 +16,6 @@ final class SpendsUITests: TestCase {
             .waitSpendsScreen()
             .addSpent()
         
-        let title = UUID.randomPart
         newSpendPage
             .inputSpent(title: title)
         

@@ -32,5 +32,29 @@ class TestCase: XCTestCase {
     lazy var spendsPage: SpendsPage! = SpendsPage(app: app)
     lazy var newSpendPage: NewSpendPage! = NewSpendPage(app: app)
     lazy var profilePage: ProfilePage! = ProfilePage(app: app)
+
+    lazy var baseSteps: BaseSteps! = BaseSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
+
+    lazy var spendSteps: SpendSteps! = SpendSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
+
+    lazy var profileSteps: ProfileSteps! = ProfileSteps(
+        app: app,
+        loginPage: loginPage,
+        spendsPage: spendsPage,
+        newSpendPage: newSpendPage,
+        profilePage: profilePage
+    )
 }
 

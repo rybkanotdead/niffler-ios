@@ -61,7 +61,7 @@ class ProfilePage: BasePage {
             let exists = category.waitForExistence(timeout: 3)
 
             XCTAssertTrue(exists,
-                          "❌ Категория '\(categoryName)' не найдена в профиле",
+                          "Категория '\(categoryName)' не найдена в профиле",
                           file: file, line: line)
         }
     }
@@ -74,7 +74,7 @@ class ProfilePage: BasePage {
             sleep(1)
 
             XCTAssertFalse(category.exists,
-                          "❌ Категория '\(categoryName)' все еще присутствует в профиле",
+                          "Категория '\(categoryName)' все еще присутствует в профиле",
                           file: file, line: line)
         }
     }
@@ -84,7 +84,7 @@ class ProfilePage: BasePage {
             let categories = getCategoriesList()
 
             XCTAssertEqual(categories.count, expectedCount,
-                          "❌ Ожидалось \(expectedCount) категорий, найдено \(categories.count)",
+                          "Ожидалось \(expectedCount) категорий, найдено \(categories.count)",
                           file: file, line: line)
         }
     }
