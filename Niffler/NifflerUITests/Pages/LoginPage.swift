@@ -2,12 +2,33 @@ import XCTest
 
 class LoginPage: BasePage {
 
+    // MARK: - UI Elements
+
+    private var loginField: XCUIElement {
+        app.textFields["userNameTextField"]
+    }
+
+    private var passwordField: XCUIElement {
+        app.secureTextFields["passwordTextField"]
+    }
+
+    private var loginButton: XCUIElement {
+        app.buttons["loginButton"]
+    }
+
+    private var signupLink: XCUIElement {
+        app.staticTexts["Create new account"]
+    }
+
+    private var loginErrorLabel: XCUIElement {
+        app.staticTexts["LoginError"]
+    }
+
     // MARK: - Actions
 
     @discardableResult
     func inputLogin(_ login: String) -> Self {
         XCTContext.runActivity(named: "Шаг: Ввод логина '\(login)'") { _ in
-            let loginField = app.textFields["userNameTextField"]
             loginField.tap()
             loginField.tap() // TODO: Remove the cause of double tap
             loginField.typeText(login)
@@ -18,7 +39,6 @@ class LoginPage: BasePage {
     @discardableResult
     func inputPassword(_ password: String) -> Self {
         XCTContext.runActivity(named: "Шаг: Ввод пароля") { _ in
-            let passwordField = app.secureTextFields["passwordTextField"]
             passwordField.tap()
             passwordField.typeText(password)
         }
@@ -28,7 +48,7 @@ class LoginPage: BasePage {
     @discardableResult
     func pressLoginButton() -> Self {
         XCTContext.runActivity(named: "Шаг: Нажатие кнопки Login") { _ in
-            app.buttons["loginButton"].tap()
+            loginButton.tap()
         }
         return self
     }
@@ -46,7 +66,7 @@ class LoginPage: BasePage {
     @discardableResult
     func openSignupPage() -> Self {
         XCTContext.runActivity(named: "Шаг: Открытие экрана регистрации") { _ in
-            app.staticTexts["Create new account"].tap()
+            signupLink.tap()
         }
         return self
     }
@@ -56,11 +76,10 @@ class LoginPage: BasePage {
     @discardableResult
     func assertLoginErrorShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Проверка: Отображается ошибка входа") { _ in
-            let isFound = app.staticTexts["LoginError"]
-                .waitForExistence(timeout: 5)
+            let isFound = loginErrorLabel.waitForExistence(timeout: 5)
 
             XCTAssertTrue(isFound,
-                          "❌ Сообщение об ошибке входа не найдено",
+                          "Сообщение об ошибке входа не найдено",
                           file: file, line: line)
         }
         return self
@@ -69,11 +88,10 @@ class LoginPage: BasePage {
     @discardableResult
     func assertNoErrorShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Проверка: Ошибка входа отсутствует") { _ in
-            let errorLabel = app.staticTexts["LoginError"]
-            let isFound = errorLabel.waitForExistence(timeout: 5)
+            let isFound = loginErrorLabel.waitForExistence(timeout: 5)
 
             XCTAssertFalse(isFound,
-                           "❌ Появилась ошибка: \(errorLabel.label)",
+                           "Появилась ошибка: \(loginErrorLabel.label)",
                           file: file, line: line)
         }
         return self

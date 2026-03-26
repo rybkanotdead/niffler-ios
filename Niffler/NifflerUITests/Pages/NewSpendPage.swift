@@ -2,12 +2,41 @@ import XCTest
 
 class NewSpendPage: BasePage {
 
+    // MARK: - UI Elements
+
+    private var amountField: XCUIElement {
+        app.textFields["amountField"]
+    }
+
+    private var selectCategoryButton: XCUIElement {
+        app.buttons["Select category"]
+    }
+
+    private var newCategoryButton: XCUIElement {
+        app.buttons["+ New category"]
+    }
+
+    private var descriptionField: XCUIElement {
+        app.textFields["descriptionField"]
+    }
+
+    private var addButton: XCUIElement {
+        app.buttons["Add"]
+    }
+
+    private var categoryNameAlertField: XCUIElement {
+        app.alerts.textFields.firstMatch
+    }
+
+    private var alertAddButton: XCUIElement {
+        app.alerts.buttons["Add"]
+    }
+
     // MARK: - Actions
 
     @discardableResult
     func inputAmount(_ amount: String = "14") -> Self {
         XCTContext.runActivity(named: "Шаг: Ввод суммы '\(amount)'") { _ in
-            let amountField = app.textFields["amountField"]
             amountField.tap()
             amountField.typeText(amount)
         }
@@ -17,8 +46,25 @@ class NewSpendPage: BasePage {
     @discardableResult
     func selectCategory(_ categoryName: String = "Рыбалка") -> Self {
         XCTContext.runActivity(named: "Шаг: Выбор категории '\(categoryName)'") { _ in
-            app.buttons["Select category"].tap()
+            openCategoryMenu()
             app.buttons[categoryName].tap()
+        }
+        return self
+    }
+
+    @discardableResult
+    private func openCategoryMenu() -> Self {
+        selectCategoryButton.tap()
+        return self
+    }
+
+    @discardableResult
+    private func createNewCategory(_ categoryName: String) -> Self {
+        XCTContext.runActivity(named: "Создание новой категории '\(categoryName)'") { _ in
+            newCategoryButton.tap()
+            categoryNameAlertField.tap()
+            categoryNameAlertField.typeText(categoryName)
+            alertAddButton.tap()
         }
         return self
     }
@@ -26,34 +72,13 @@ class NewSpendPage: BasePage {
     @discardableResult
     func selectOrCreateCategory(_ categoryName: String) -> Self {
         XCTContext.runActivity(named: "Шаг: Выбор/создание категории '\(categoryName)'") { _ in
-            let categoryButton = app.buttons["Select category"]
-            categoryButton.tap()
+            openCategoryMenu()
 
-            let newCategoryButton = app.buttons["+ New category"]
-
-            if newCategoryButton.exists {
-                XCTContext.runActivity(named: "  → Создание новой категории") { _ in
-                    newCategoryButton.tap()
-                    let categoryNameField = app.alerts.textFields.firstMatch
-                    categoryNameField.tap()
-                    categoryNameField.typeText(categoryName)
-                    app.alerts.buttons["Add"].tap()
-                }
+            let existingCategory = app.buttons[categoryName]
+            if existingCategory.exists {
+                existingCategory.tap()
             } else {
-                let existingCategory = app.buttons[categoryName]
-                if existingCategory.exists {
-                    XCTContext.runActivity(named: "  → Выбор существующей категории") { _ in
-                        existingCategory.tap()
-                    }
-                } else {
-                    XCTContext.runActivity(named: "  → Создание категории через меню") { _ in
-                        app.buttons["+ New category"].tap()
-                        let categoryNameField = app.alerts.textFields.firstMatch
-                        categoryNameField.tap()
-                        categoryNameField.typeText(categoryName)
-                        app.alerts.buttons["Add"].tap()
-                    }
-                }
+                createNewCategory(categoryName)
             }
         }
         return self
@@ -62,7 +87,6 @@ class NewSpendPage: BasePage {
     @discardableResult
     func inputDescription(_ description: String) -> Self {
         XCTContext.runActivity(named: "Шаг: Ввод описания '\(description)'") { _ in
-            let descriptionField = app.textFields["descriptionField"]
             descriptionField.tap()
             descriptionField.typeText(description)
         }
@@ -72,7 +96,7 @@ class NewSpendPage: BasePage {
     @discardableResult
     func submit() -> Self {
         XCTContext.runActivity(named: "Шаг: Нажатие кнопки Add") { _ in
-            app.buttons["Add"].tap()
+            addButton.tap()
         }
         return self
     }
@@ -101,20 +125,4 @@ class NewSpendPage: BasePage {
         return self
     }
 
-    // MARK: - Legacy compatibility methods (deprecated)
-
-    @available(*, deprecated, renamed: "submit")
-    func pressAddSpend() {
-        submit()
-    }
-
-    @available(*, deprecated, renamed: "createSpend")
-    func inputSpent(title: String) {
-        createSpend(description: title)
-    }
-
-    @available(*, deprecated, renamed: "createSpendWithNewCategory")
-    func inputSpentWithNewCategory(title: String, categoryName: String) {
-        createSpendWithNewCategory(categoryName: categoryName, description: title)
-    }
 }
