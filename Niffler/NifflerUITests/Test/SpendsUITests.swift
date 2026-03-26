@@ -1,28 +1,34 @@
 import XCTest
 
 final class SpendsUITests: TestCase {
-    
-    func test_whenAddSpent_shouldShowSpendInList() {
-        launchAppWithoutLogin()
-        
-        // Arrange
-        loginPage
-            .input(login: "stage", password: "12345")
-        
-        // Act
-        spendsPage
-            .waitSpendsScreen()
-            .addSpent()
-        
-        let title = UUID.randomPart
-        newSpendPage
-            .inputSpent(title: title)
-        
-        // Assert
-        spendsPage
-            .assertNewSpendIsShown(title: title)
+
+    // MARK: - Add Spend Tests
+
+    func test_addSpend_shouldShowInList() {
+        XCTContext.runActivity(named: "Тест: Добавление траты отображается в списке") { _ in
+            // Arrange
+            launchAppWithoutLogin()
+            let spendDescription = "Трата_\(UUID.randomPart)"
+
+            loginPage
+                .login(username: "stage", password: "12345")
+
+            // Act
+            spendsPage
+                .waitForSpendsScreen()
+                .openAddSpendForm()
+
+            newSpendPage
+                .createSpend(description: spendDescription)
+
+            // Assert
+            spendsPage
+                .assertSpendIsShown(spendDescription)
+        }
     }
 }
+
+// MARK: - Helper Extensions
 
 extension UUID {
     static var randomPart: String {
